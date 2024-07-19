@@ -1,4 +1,4 @@
-## NextUI Wireup
+## NextUI Wireup.
 
 1. Execute the following command in your terminal from the root folder:
 
@@ -47,7 +47,7 @@ export default function Providers({ children }: ProvidersProps) {
 
 4. Next we should import this component to our `layout.tsx` file and wrap its children with `<Providers>{children}</Providers>` component.
 
-## Prisma Client WireUp - sqlite provider
+## Prisma Client WireUp - sqlite provider.
 
 1. Execute the following command in your terminal from the root folder:
 
@@ -80,6 +80,50 @@ export const db = new PrismaClient();
 ```
 
 This `db` object we export is going to have a ton of different methods on it, which you can use later to interact with your DB.
+
+## Next-auth / Authjs (authentication) Wireup (I am going to use GitHub provider in this app to Signup/Login).
+
+### There are several steps to setup our Next-auth:
+
+1. Create an OAuth app and generate a `client_id` and `client_secret` by following this url - `github.com/settings/applications/new`.
+
+2. Add `AUTH_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` to a `.env.local` file.
+
+3. Install these packages:
+
+   - @auth/core@0.18.1
+   - @auth/prisma-adapter@1.0.6
+   - next-auth@5.0.0-beta.3
+
+4. Make an `auth.js` file in the `src` folder. Setup NextAuth and the PrismaAdapter in there. [See here](https://github.com/SergiiBurgazlieiev/debate-app/blob/main/src/auth.ts)
+
+5. Setup the `app/api/auth/[...nextauth]/routes.ts` file to handle the requests between GitHub's servers and ours. [See here](https://github.com/SergiiBurgazlieiev/debate-app/blob/main/src/app/api/auth/%5B...nextauth%5D/route.ts)
+
+6. Create server actions to signin/signout the user.
+
+## How to setup DEV OAuth App with Github
+
+1. Go to [Register a new OAuth application Page](https://github.com/settings/applications/new);
+2. Fill - Homepage URL input with - `http://localhost:3000`
+3. Fill - Authorization callback URL - `http://localhost:3000/api/auth/callback/github`
+4. Register Application
+
+After you register your OAuth app you will be redirected to the `General` page, where you can see a section with the client_id and client secrets, which you can then generate. Right after this you can create `.env.local` file in your root folder and define three env vars(make sure you spell them in exact way as you see below):
+
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+- `AUTH_SECRET`
+
+Example of your `.env.local` file:
+
+```js
+// GITHUB_CLIENT_ID comes from our GitHub OAuth app
+GITHUB_CLIENT_ID = 'Ov23wioysPsQdUdOnrjr';
+// GITHUB_CLIENT_SECRET comes from our GitHub OAuth app
+GITHUB_CLIENT_SECRET = '72a16w2c40967958eff9y50e263c2d0c5050ce12';
+// AUTH_SECRET can be any string with chars and numbers
+AUTH_SECRET = '1nlnkn3jnkjvekdmldfvne234nvcnweojr';
+```
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
