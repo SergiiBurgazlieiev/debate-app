@@ -1,3 +1,52 @@
+## NextUI Wireup
+
+1. Execute the following command in your terminal from the root folder.
+
+```js
+npm install --save-exact @nextui-org/react@2.2.9 framer-motion
+```
+
+We won't be using the `framer-motion` library directly, but the NextUI library utilizes it.
+
+2. Once, installed nextUi package go to the `tailwind.config.ts` file inside of our root project directory. Import `nextui`:
+
+```js
+import { nextui } from '@nextui-org/react';
+```
+
+Next, we'll add an entry to our content array that instructs Tailwind to search the NextUI directory for all `{js, ts, jsx, tsx}` files, read them, and extract the class names. Additionally, we'll add `darkMode: "class"` above the plugins section. Finally, we'll call the `nextui` method within our plugins array.
+
+```js
+const config: Config = {
+	content: [
+		...
+		// nextui wireup -  this is IMPORTANT
+		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+	],
+  ...
+  darkMode:"class",
+  plugins:[nextui()]
+}
+```
+
+3. Next go to app folder and create a new file - `./src/app/providers.tsx`
+
+```js
+'use client';
+
+import { NextUIProvider } from '@nextui-org/react';
+
+interface ProvidersProps {
+	children: React.ReactNode;
+}
+
+export default function Providers({ children }: ProvidersProps) {
+	return <NextUIProvider>{children}</NextUIProvider>;
+}
+```
+
+4. Next we should import this component to our `layout.tsx` file and wrap its children with `<Providers>{children}</Providers>` component.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
