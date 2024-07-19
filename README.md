@@ -125,6 +125,57 @@ GITHUB_CLIENT_SECRET = '72a16w2c40967958eff9y50e263c2d0c5050ce12';
 AUTH_SECRET = '1nlnkn3jnkjvekdmldfvne234nvcnweojr';
 ```
 
+## The Theory Behind OAuth - Step-by-Step Explanation of OAuth Workflow (Our app <=> GitHub)
+
+1. **User Initiates Sign-Up:**
+
+   - The user clicks the "Sign in with GitHub" button in our application.
+   - The user's browser sends a request to our backend server.
+
+2. **Redirect to GitHub:**
+
+   - Our server recognizes the user's intent to sign up and redirects the user's browser to GitHub's authorization page.
+   - The redirect URL includes our GitHub OAuth app's client ID.
+
+3. **GitHub Authorization Page:**
+
+   - GitHub presents a page asking the user if they authorize our application to access their profile information.
+   - The user consents by clicking "Authorize".
+
+4. **Redirection Back to Your App:**
+
+   - After authorization, GitHub redirects the user's browser back to our application.
+   - This redirection includes an authorization code in the query string.
+
+5. **Handle Authorization Code:**
+
+   - Our application receives the authorization code via a route handler.
+   - This route handler extracts the code from the query string.
+
+6. **Exchange Code for Access Token:**
+
+   - Our server makes a request to GitHub, including the authorization code, client ID, and client secret.
+   - GitHub validates these and responds with an access token.
+
+7. **Access User Information:**
+
+   - Our server uses the access token to make an authenticated request to GitHub's API to fetch the user's profile information (name, email, profile image, etc.).
+
+8. **Create User Record:**
+
+   - The user's profile information is stored in our application's database (in our case by using a Prisma adapter).
+   - A new user record is created if one doesn't exist (automatically).
+
+9. **Send Cookie to Browser:**
+
+   - Our server sends a cookie to the user's browser.
+   - This cookie contains encrypted information identifying the user.
+
+10. **Subsequent Requests:**
+
+    - When the user's browser makes subsequent requests to our server, the cookie is automatically included.
+    - Our server reads the cookie to identify the user and handle the request accordingly.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
