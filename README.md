@@ -1,9 +1,9 @@
 ## NextUI Wireup
 
-1. Execute the following command in your terminal from the root folder.
+1. Execute the following command in your terminal from the root folder:
 
 ```js
-npm install --save-exact @nextui-org/react@2.2.9 framer-motion
+	> npm install --save-exact @nextui-org/react@2.2.9 framer-motion
 ```
 
 We won't be using the `framer-motion` library directly, but the NextUI library utilizes it.
@@ -46,6 +46,40 @@ export default function Providers({ children }: ProvidersProps) {
 ```
 
 4. Next we should import this component to our `layout.tsx` file and wrap its children with `<Providers>{children}</Providers>` component.
+
+## Prisma Client WireUp - sqlite provider
+
+1. Execute the following command in your terminal from the root folder:
+
+```js
+	> npm install prisma
+```
+
+2. Init client prisma with the following command:
+
+```js
+	> npx prisma init --datasource-provider sqlite
+```
+
+After running this command, the `./prisma` folder should appear in the root directory of your project. And inside of this folder you can find `schema.prisma` file.
+
+3. Once you define your desired schema, and write some models. You can create a DB by running the following command(when you first going to run this command you are going to be asked to name your migration):
+
+```js
+	> npx prisma migrate dev
+```
+
+After completing this command you should see inside of your `./prisma` folder - `dev.db` file - your local data base.
+
+4. Next create inside of your `src` folder `db/index.ts` folder and initialize your DB.
+
+```js
+import { PrismaClient } from '@prisma/client';
+
+export const db = new PrismaClient();
+```
+
+This `db` object we export is going to have a ton of different methods on it, which you can use later to interact with your DB.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
