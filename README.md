@@ -176,6 +176,29 @@ AUTH_SECRET = '1nlnkn3jnkjvekdmldfvne234nvcnweojr';
     - When the user's browser makes subsequent requests to our server, the cookie is automatically included.
     - Our server reads the cookie to identify the user and handle the request accordingly.
 
+## Why should we work on our initial design?
+
+Working on the initial design of our app is crucial for several reasons. We've successfully set up our authentication system and ensured that we can handle user sign-ins and sign-outs effectively. Now, it's time to move forward with the rest of our application by focusing on `upfront` design. This phase involves more initial design work than you might typically do for other apps, but it's essential.
+
+**Here's why this step is important:**
+
+1. **Preventing Deployment Issues:** In our previous work, we encountered strange behavior when running our application in production mode, mainly due to the full root cache mechanism. We had to backtrack and identify all the locations where data changes occurred and then call the revalidatePath function to ensure our server re-renders the specific pages with updated data. Addressing this caching mechanism at the beginning rather than at the end of the project makes it significantly easier and prevents the need for extensive code modifications later.
+
+2. **Easier Caching Management:** Dealing with caching systems upfront simplifies the process. Handling these considerations early on makes it more manageable and reduces complexity when deploying the application.
+
+3. **Route Identification and Data Display:** By examining our mockups and identifying all the different routes our application needs, we can plan the data to be displayed on each screen. This step ensures that we understand the data flow and structure from the outset, making the rest of the development process smoother.
+
+4. **Overall Project Efficiency:** Going through this initial design process can make the entire project more straightforward and efficient. Although it may seem like extra work initially, it ultimately saves time and effort by preventing future issues and streamlining development.
+
+**Here is recommended initial design:**
+
+1. Identify all the different routes you want your app to have and the data that each shows.
+2. Make `path helper` functions.
+3. Create your routing folders and `page.tsx` files based on step #1
+4. Identify the places where data changes in your app.
+5. Make empty server actions for each of those.
+6. Add in comments on what paths you will need to revalidate for each server action.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
