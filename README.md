@@ -199,6 +199,28 @@ Working on the initial design of our app is crucial for several reasons. We've s
 5. Make empty server actions for each of those.
 6. Add in comments on what paths you will need to revalidate for each server action.
 
+## Form validations with Zod lib
+
+To add validation to our form fields, we're going to use a third-party package called `Zod`. Zod is a powerful library for schema-based validation, and we'll be referencing it using the variable `z`, once we import it.
+
+First, we will create a schema object using Zod, which will define a set of validation rules for our data. Zod allows us to validate various data types such as arrays, objects, strings, numbers, and booleans.
+
+**Example Create Topic Form:**
+
+For our specific use case, we'll define a schema for an object with two properties: `name` and `description`.
+
+`Name`: Must be a string with at least three characters, consisting only of lowercase letters and optional dashes. Any other characters, such as numbers, capital letters, or symbols, will cause the validation to fail.
+`Description`: Must be a string with a minimum length of ten characters.
+After defining the schema, we'll get a validator object that we can use to validate user input or any other data in our application.
+
+To get started, we'll install `Zod` by running
+
+```js
+> npm install zod
+```
+
+Then, we'll create our schema, and integrate the validation into our project.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
