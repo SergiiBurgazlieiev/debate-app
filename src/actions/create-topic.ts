@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { auth } from '@/auth';
 
 // Create topic schema
 const createTopicSchema = z.object({
@@ -18,6 +19,7 @@ interface CreateTopicFormState {
 	errors: {
 		name?: string[];
 		description?: string[];
+		_form?: string[];
 	};
 }
 
@@ -38,6 +40,20 @@ export const createTopic = async (
 		 */
 		return {
 			errors: result.error.flatten().fieldErrors,
+		};
+	}
+
+	/**
+	 * A generic error message will be displayed on the form
+	 * when a user attempts to create a topic without being
+	 * authenticated.
+	 */
+	const session = await auth();
+	if (!session || !session?.user) {
+		return {
+			errors: {
+				_form: ['You must signIn to create a topic!'],
+			},
 		};
 	}
 
