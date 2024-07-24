@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 
+// Create topic schema
 const createTopicSchema = z.object({
 	name: z
 		.string()
@@ -12,7 +13,18 @@ const createTopicSchema = z.object({
 	description: z.string().min(10),
 });
 
-export const createTopic = async (formData: FormData) => {
+// formState type
+interface CreateTopicFormState {
+	errors: {
+		name?: string[];
+		description?: string[];
+	};
+}
+
+export const createTopic = async (
+	formState: CreateTopicFormState,
+	formData: FormData
+): Promise<CreateTopicFormState> => {
 	const result = createTopicSchema.safeParse({
 		name: formData.get('name'),
 		description: formData.get('description'),
@@ -24,8 +36,14 @@ export const createTopic = async (formData: FormData) => {
 		 * list of errors - we can call result, error, flatten and then
 		 * reference field errors.
 		 */
-		console.log(result.error.flatten().fieldErrors);
+		return {
+			errors: result.error.flatten().fieldErrors,
+		};
 	}
+
+	return {
+		errors: {},
+	};
 
 	// TODO: revalidate the homepage
 };
