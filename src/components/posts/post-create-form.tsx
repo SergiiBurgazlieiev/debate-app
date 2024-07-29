@@ -11,8 +11,12 @@ import {
 import { createPost } from '@/actions';
 import { FormButton } from '../common/form-button';
 
-export const PostCreateForm = () => {
-	const [formState, action] = useFormState(createPost, {
+interface PostCreateFormProps {
+	slug: string;
+}
+
+export const PostCreateForm = ({ slug }: PostCreateFormProps) => {
+	const [formState, action] = useFormState(createPost.bind(null, slug), {
 		errors: {},
 	});
 	return (
@@ -40,6 +44,11 @@ export const PostCreateForm = () => {
 							isInvalid={!!formState.errors.content}
 							errorMessage={formState.errors.content?.join('. ')}
 						/>
+						{formState.errors._form && (
+							<div className='rounded p-2 bg-red-200 border border-red-400'>
+								{formState.errors._form.join('. ')}
+							</div>
+						)}
 						<FormButton>Create Post</FormButton>
 					</div>
 				</form>
