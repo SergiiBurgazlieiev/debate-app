@@ -294,6 +294,43 @@ export const fetchCommentsByPostId = (
 
 Although the initial implementation using props is functional and effective, but we can also use interesting Next.js feature to optimize the setup further.
 
+In the second approach, the focus is on optimizing the fetching of comments by ensuring that multiple identical requests are consolidated into a single execution. This is achieved using `request memoization` with React's `cache` function.
+
+**Steps:**
+
+1. Import Cache: Import the cache function from React at the top of the file.
+2. Wrap Fetch Function: Wrap the `fetchCommentsByPostId` function with cache to enable memoization.
+
+```js
+import { cache } from 'react';
+import type { Comment } from '@prisma/client';
+import { db } from '@/db';
+
+export type CommentWithAuthor = Comment & {
+	user: {
+		name: string | null,
+		image: string | null,
+	},
+};
+
+export const fetchCommentsByPostId = cache(
+	(postId: string): Promise<CommentWithAuthor[]> => {
+		return db.comment.findMany({
+			where: { postId },
+			include: { user: { select: { name: true, image: true } } },
+		});
+	}
+);
+```
+
+This ensures that even if fetchCommentsByPostId is called multiple times with the same arguments, it will only execute once. Subsequent calls will return the cached result.
+
+**Benefits:**
+
+- Efficiency: Reduces redundant database queries, saving resources and improving performance.
+- Consistency: Ensures that all components receive the same data when making identical requests.
+- This approach leverages React's built-in caching mechanism to optimize data fetching, ensuring efficient and consistent responses across multiple component calls.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
