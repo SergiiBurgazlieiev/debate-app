@@ -221,6 +221,79 @@ To get started, we'll install `Zod` by running
 
 Then, we'll create our schema, and integrate the validation into our project.
 
+## Recursive component
+
+Let's look at `<CommentList/>` and `<CommentShow/>`.
+
+**`<CommentList/>` Component:** Acts as a wrapper that manages and displays the overall list of comments.
+
+**`<CommentShow/>` Component:** Responsible for rendering each individual comment. The complexity arises from the fact that comments can be nested infinitely, allowing replies to comments, which in turn can have their own replies.
+
+**Recursive Nature of `<CommentShow/>` component**
+
+Recursive Component: `<CommentShow/>` is a recursive component, meaning it calls itself to handle nested comments.
+
+**Parent-Child Relationship:** Comments are structured in a tree-like format using parent IDs. Each comment can have child comments, indicated by their parent ID.
+
+**Rendering Process:**
+
+`<CommentList/>` identifies top-level comments (those with a parent ID of null). It renders `<CommentShow/>` for each top-level comment. `<CommentShow/>` then finds and renders its child comments by calling itself with the child comment IDs. This recursive rendering continues until there are no more child comments to display.
+
+**Example:** Four comments are shown, with the first comment having replies (children) with IDs 2 and 3, and a separate comment with ID 4.
+
+```js
+const comments = [
+	{ id: 1 },
+	{ id: 2, parentId: 1 },
+	{ id: 3, parentId: 1 },
+	{ id: 4 },
+];
+```
+
+**Database Representation:** Comments are represented in the database with parent-child relationships, facilitating the recursive display.
+
+**Implementation Strategy**
+
+Two Strategies:
+
+- **Using Props:** A classic method of passing data down through props.
+- **Next.js Feature:** An alternative, less smooth method showcasing an interesting feature in Next.js.
+
+## Fetching and Sharing Comments in a Recursive Component
+
+**Implementation Steps:**
+
+1. **Fetch Comments by Post ID:** Create a commentQuery file with a new type and a query function `fetchCommentsByPostId`. The query function retrieves comments and their authors from the database, including the author's name and profile image.
+
+```js
+export type CommentWithAuthor = Comment & {
+	user: {
+		name: string | null,
+		image: string | null,
+	},
+};
+
+export const fetchCommentsByPostId = (
+	postId: string
+): Promise<CommentWithAuthor[]> => {
+	return db.comment.findMany({
+		where: { postId },
+		include: { user: { select: { name: true, image: true } } },
+	});
+};
+```
+
+2. **Pass Data Using Props:** Import the query function into the `<PostShowPage/>` component and pass it down to the `<CommentList/>` component as a `fetchData` prop.
+   `<CommentList/>` calls the `fetchData` function to get the list of comments and passes this list down to the `<CommentShow/>` components using props.
+
+3. **Define Types and Props:** Define the `CommentWithAuthor` type, which includes both the comment and the author's information.
+   Ensure the `<CommentList/>` and `<CommentShow/>` components are set up to receive and handle the comments as props.
+
+4. **Display Comments and Replies:** `<CommentList/>` identifies top-level comments and renders `<CommentShow/>` for each, passing the respective comment ID.
+   `<CommentShow/>` **recursively** renders nested comments by calling itself with child comment IDs, forming an infinitely nested list.
+
+Although the initial implementation using props is functional and effective, but we can also use interesting Next.js feature to optimize the setup further.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
