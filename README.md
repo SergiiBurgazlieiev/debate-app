@@ -331,6 +331,20 @@ This ensures that even if fetchCommentsByPostId is called multiple times with th
 - Consistency: Ensures that all components receive the same data when making identical requests.
 - This approach leverages React's built-in caching mechanism to optimize data fetching, ensuring efficient and consistent responses across multiple component calls.
 
+# Summary
+
+The best practices learned throughout the development of this application are - efficient project planning, static site generation, performance optimization, and reusable data-fetching patterns.
+
+**Key Takeaways**
+
+1. Preplanning Server Actions: Designing and stubbing server actions ahead of time significantly reduces development time and effort. Initial focus on understanding form state hooks and validation helped streamline the process.
+
+2. Building Application Regularly: Regularly building the application in the terminal provides insights into the structure and behavior of routes. Ensures that the application remains static and avoids unintended dynamic rendering.
+
+3. Using Suspense for Component Streaming: Wrapping slow-loading components with Suspense enables component streaming. This results in a better user experience by reducing load times for data-heavy components.
+
+4. Query Function Data Fetching Pattern: Implementing query functions in a dedicated database folder centralizes data loading responsibilities. This approach facilitates reusable components, making the codebase cleaner and more maintainable. Using the query function pattern avoids multiple components for different data-fetching implementations and reduces complexity.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
